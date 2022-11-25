@@ -13,14 +13,10 @@
 #  See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+FROM wnameless/oracle-xe-11g-r2
+ADD assets/ /assets/
 
-# Set root logger level to OFF to not flood build logs
-# set manually to INFO for debugging purposes
-rootLogger.level=WARN
-rootLogger.appenderRef.test.ref = TestLogger
+ENV ORACLE_SID=XE ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
 
-appender.testlogger.name = TestLogger
-appender.testlogger.type = CONSOLE
-appender.testlogger.target = SYSTEM_ERR
-appender.testlogger.layout.type = PatternLayout
-appender.testlogger.layout.pattern = %-4r [%t] %-5p %c - %m%n
+RUN mkdir /u01/app/oracle/oradata/recovery_area && \
+    bash -x /assets/activate-archivelog.sh

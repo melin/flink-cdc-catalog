@@ -1,13 +1,12 @@
-package com.superior.flink.cdc.catalog;
+package com.superior.flink.jdbc.catalog;
 
-import com.superior.flink.mapper.OracleTypeMapper;
-import com.ververica.cdc.connectors.oracle.table.OracleTableSourceFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.flink.connector.jdbc.catalog.AbstractJdbcCatalog;
 import org.apache.flink.connector.jdbc.dialect.JdbcDialectTypeMapper;
+import org.apache.flink.connector.jdbc.dialect.mysql.MySqlTypeMapper;
 import org.apache.flink.table.catalog.ObjectPath;
 import org.apache.flink.table.catalog.exceptions.CatalogException;
 import org.apache.flink.table.catalog.exceptions.DatabaseNotExistException;
-import org.apache.flink.table.factories.Factory;
 import org.apache.flink.table.types.DataType;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.TemporaryClassLoaderContext;
@@ -20,18 +19,13 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class OracleCatalog extends AbstractJdbcCatalog {
+public class SqlServerCatalog extends AbstractJdbcCatalog {
 
-    private static final Logger LOG = LoggerFactory.getLogger(org.apache.flink.connector.jdbc.catalog.MySqlCatalog.class);
-
-    private static final String MYSQL_CONNECTOR = "oracle-cdc";
-
-    private final JdbcDialectTypeMapper dialectTypeMapper;
+    private static final Logger LOG = LoggerFactory.getLogger(SqlServerCatalog.class);
 
     private static final Set<String> builtinDatabases =
             new HashSet<String>() {
@@ -43,13 +37,10 @@ public class OracleCatalog extends AbstractJdbcCatalog {
                 }
             };
 
-    public OracleCatalog(
-            ClassLoader userClassLoader,
-            String catalogName,
-            String defaultDatabase,
-            String username,
-            String pwd,
-            String baseUrl) {
+    private final JdbcDialectTypeMapper dialectTypeMapper;
+
+
+    public SqlServerCatalog(ClassLoader userClassLoader, String catalogName, String defaultDatabase, String username, String pwd, String baseUrl) {
         super(userClassLoader, catalogName, defaultDatabase, username, pwd, baseUrl);
 
         String driverVersion =
@@ -58,17 +49,7 @@ public class OracleCatalog extends AbstractJdbcCatalog {
                 Preconditions.checkNotNull(
                         getDatabaseVersion(), "Database version must not be null.");
         LOG.info("Driver version: {}, database version: {}", driverVersion, databaseVersion);
-        this.dialectTypeMapper = new OracleTypeMapper(databaseVersion, driverVersion);
-    }
-
-    @Override
-    public Optional<Factory> getFactory() {
-        return Optional.of(new OracleTableSourceFactory());
-    }
-
-    @Override
-    protected String getConnector() {
-        return MYSQL_CONNECTOR;
+        this.dialectTypeMapper = new MySqlTypeMapper(databaseVersion, driverVersion);
     }
 
     @Override
@@ -79,6 +60,8 @@ public class OracleCatalog extends AbstractJdbcCatalog {
                 1,
                 dbName -> !builtinDatabases.contains(dbName));
     }
+
+    // ------ tables ------
 
     @Override
     public List<String> listTables(String databaseName)
@@ -110,6 +93,28 @@ public class OracleCatalog extends AbstractJdbcCatalog {
                 .isEmpty();
     }
 
+    /** Converts MySQL type to Flink {@link DataType}. */
+    @Override
+    protected DataType fromJDBCType(ObjectPath tablePath, ResultSetMetaData metadata, int colIndex)
+            throws SQLException {
+        return dialectTypeMapper.mapping(tablePath, metadata, colIndex);
+    }
+
+    @Override
+    protected String getTableName(ObjectPath tablePath) {
+        return tablePath.getObjectName();
+    }
+
+    @Override
+    protected String getSchemaName(ObjectPath tablePath) {
+        return tablePath.getDatabaseName();
+    }
+
+    @Override
+    protected String getSchemaTableName(ObjectPath tablePath) {
+        return tablePath.getObjectName();
+    }
+
     private String getDatabaseVersion() {
         try (TemporaryClassLoaderContext ignored =
                      TemporaryClassLoaderContext.of(userClassLoader)) {
@@ -136,29 +141,5 @@ public class OracleCatalog extends AbstractJdbcCatalog {
                         e);
             }
         }
-    }
-
-    /**
-     * Converts MySQL type to Flink {@link DataType}.
-     */
-    @Override
-    protected DataType fromJDBCType(ObjectPath tablePath, ResultSetMetaData metadata, int colIndex)
-            throws SQLException {
-        return dialectTypeMapper.mapping(tablePath, metadata, colIndex);
-    }
-
-    @Override
-    protected String getTableName(ObjectPath tablePath) {
-        return tablePath.getObjectName();
-    }
-
-    @Override
-    protected String getSchemaName(ObjectPath tablePath) {
-        return tablePath.getDatabaseName();
-    }
-
-    @Override
-    protected String getSchemaTableName(ObjectPath tablePath) {
-        return tablePath.getObjectName();
     }
 }
