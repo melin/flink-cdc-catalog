@@ -1,6 +1,5 @@
-package com.examples.flink.catalog;
+package com.superior.flink.cdc.catalog;
 
-import com.examples.flink.catalog.AbstractJdbcCatalog;
 import com.ververica.cdc.connectors.mysql.table.MySqlTableSourceFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.connector.jdbc.dialect.JdbcDialectTypeMapper;
@@ -26,11 +25,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SqlServerCatalog extends AbstractJdbcCatalog {
+public class Db2Catalog extends AbstractJdbcCatalog {
 
     private static final Logger LOG = LoggerFactory.getLogger(org.apache.flink.connector.jdbc.catalog.MySqlCatalog.class);
 
-    private static final String MYSQL_CONNECTOR = "sqlserver-cdc";
+    private static final String MYSQL_CONNECTOR = "db2-cdc";
 
     private final JdbcDialectTypeMapper dialectTypeMapper;
 
@@ -44,7 +43,7 @@ public class SqlServerCatalog extends AbstractJdbcCatalog {
                 }
             };
 
-    public SqlServerCatalog(
+    public Db2Catalog(
             ClassLoader userClassLoader,
             String catalogName,
             String defaultDatabase,

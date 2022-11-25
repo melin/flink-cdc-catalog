@@ -36,6 +36,8 @@ under the License.
 		<maven.compiler.source>${target.java.version}</maven.compiler.source>
 		<maven.compiler.target>${target.java.version}</maven.compiler.target>
 		<log4j.version>2.14.1</log4j.version>
+		<flink.cdc.version>2.3.0</flink.cdc.version>
+		<testcontainers.version>1.17.6</testcontainers.version>
 	</properties>
 
 	<repositories>
@@ -91,31 +93,31 @@ under the License.
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-connector-base</artifactId>
-			<version>1.16.0</version>
+			<version>${flink.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-connector-jdbc</artifactId>
-			<version>1.16.0</version>
+			<version>${flink.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.ververica</groupId>
 			<artifactId>flink-connector-mysql-cdc</artifactId>
-			<version>2.3.0</version>
+			<version>${flink.cdc.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.ververica</groupId>
 			<artifactId>flink-connector-postgres-cdc</artifactId>
-			<version>2.3.0</version>
+			<version>${flink.cdc.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.ververica</groupId>
 			<artifactId>flink-connector-oracle-cdc</artifactId>
-			<version>2.3.0</version>
+			<version>${flink.cdc.version}</version>
 		</dependency>
 
 		<!-- Add logging framework, to produce console output when running in the IDE. -->
@@ -137,6 +139,35 @@ under the License.
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ververica</groupId>
+			<artifactId>flink-connector-test-util</artifactId>
+			<version>${flink.cdc.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-table-planner_2.12</artifactId>
+			<version>${flink.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<version>${testcontainers.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

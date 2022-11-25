@@ -1,1 +1,1 @@
-com.examples.flink.catalog.factory.FlinkCDCCatalogFactory
+com.superior.flink.cdc.catalog.factory.FlinkCDCCatalogFactory

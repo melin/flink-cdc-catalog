@@ -1,4 +1,4 @@
-package com.examples.flink.catalog;
+package com.superior.flink.cdc.catalog;
 
 import com.ververica.cdc.connectors.mysql.table.MySqlTableSourceFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -25,11 +25,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class OracleCatalog extends AbstractJdbcCatalog {
+public class TidbCatalog extends AbstractJdbcCatalog {
 
     private static final Logger LOG = LoggerFactory.getLogger(org.apache.flink.connector.jdbc.catalog.MySqlCatalog.class);
 
-    private static final String MYSQL_CONNECTOR = "oracle-cdc";
+    private static final String MYSQL_CONNECTOR = "tidb-cdc";
 
     private final JdbcDialectTypeMapper dialectTypeMapper;
 
@@ -43,7 +43,7 @@ public class OracleCatalog extends AbstractJdbcCatalog {
                 }
             };
 
-    public OracleCatalog(
+    public TidbCatalog(
             ClassLoader userClassLoader,
             String catalogName,
             String defaultDatabase,

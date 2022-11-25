@@ -1,7 +1,7 @@
-package com.examples.flink.catalog.factory;
+package com.superior.flink.cdc.catalog.factory;
 
-import com.examples.flink.catalog.MySqlCatalog;
-import com.examples.flink.catalog.PostgresCatalog;
+import com.superior.flink.cdc.catalog.MySqlCatalog;
+import com.superior.flink.cdc.catalog.PostgresCatalog;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.table.catalog.Catalog;

@@ -1,4 +1,4 @@
-package com.examples.flink.catalog;
+package com.superior.flink.cdc.catalog;
 
 import com.ververica.cdc.connectors.mysql.source.config.MySqlSourceOptions;
 import org.apache.commons.compress.utils.Lists;
