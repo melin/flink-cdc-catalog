@@ -1,6 +1,7 @@
 package com.superior.flink.cdc.catalog.factory;
 
 import com.superior.flink.cdc.catalog.MySqlCatalog;
+import com.superior.flink.cdc.catalog.OracleCatalog;
 import com.superior.flink.cdc.catalog.PostgresCatalog;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.ConfigOption;
@@ -11,6 +12,7 @@ import org.apache.flink.table.factories.FactoryUtil;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.ververica.cdc.connectors.base.options.JdbcSourceOptions.SCHEMA_NAME;
 import static org.apache.flink.connector.jdbc.catalog.factory.JdbcCatalogFactoryOptions.BASE_URL;
 import static org.apache.flink.connector.jdbc.catalog.factory.JdbcCatalogFactoryOptions.DEFAULT_DATABASE;
 import static org.apache.flink.connector.jdbc.catalog.factory.JdbcCatalogFactoryOptions.PASSWORD;
@@ -46,6 +48,14 @@ public class FlinkCDCCatalogFactory implements CatalogFactory {
                     helper.getOptions().get(USERNAME),
                     helper.getOptions().get(PASSWORD),
                     baseUrl);
+        } else if (StringUtils.startsWith(baseUrl, "jdbc:oracle:")) {
+            return new OracleCatalog(
+                    context.getClassLoader(),
+                    context.getName(),
+                    helper.getOptions().get(DEFAULT_DATABASE),
+                    helper.getOptions().get(USERNAME),
+                    helper.getOptions().get(PASSWORD),
+                    baseUrl);
         } else {
             throw new UnsupportedOperationException(
                     String.format("Catalog for '%s' is not supported yet.", baseUrl));
@@ -66,6 +76,7 @@ public class FlinkCDCCatalogFactory implements CatalogFactory {
     public Set<ConfigOption<?>> optionalOptions() {
         final Set<ConfigOption<?>> options = new HashSet<>();
         options.add(PROPERTY_VERSION);
+        options.add(SCHEMA_NAME);
         return options;
     }
 }

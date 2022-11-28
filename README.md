@@ -17,5 +17,5 @@ SELECT * FROM mysql_cdc_catalog.example.user_city /*+ OPTIONS('scan.startup.mode
 
 
 ### 参考
-1. [Mac M1 Docker 安装 Oracle](https://www.dbasolved.com/2022/09/running-x86_64-docker-images-on-mac-m1-max-oracle-database-19c/)
+1. [基于 Flink CDC 实现 Oracle 数据实时更新到 Kudu](https://cloud.tencent.com/developer/article/1949088)
 2. [Viewing Tables Accessible by Current User](https://chartio.com/resources/tutorials/how-to-list-all-tables-in-oracle/#viewing-tables-accessible-by-current-user)

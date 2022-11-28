@@ -5,7 +5,6 @@ import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.connector.jdbc.catalog.AbstractJdbcCatalog;
 import org.apache.flink.connector.jdbc.dialect.JdbcDialectTypeMapper;
-import org.apache.flink.connector.jdbc.dialect.mysql.MySqlTypeMapper;
 import org.apache.flink.table.api.Schema;
 import org.apache.flink.table.catalog.CatalogBaseTable;
 import org.apache.flink.table.catalog.CatalogTable;
@@ -34,23 +33,7 @@ public class OracleCatalog extends AbstractJdbcCatalog {
 
     private static final Logger LOG = LoggerFactory.getLogger(OracleCatalog.class);
 
-    private static final Set<String> builtinDatabases =
-            new HashSet<String>() {
-                {
-                    add("SYSTEM");
-                    add("SYS");
-                    add("EPBW");
-                    add("ANONYMOUS");
-                    add("APEX_PUBLIC_USER");
-                    add("APEX_040000");
-                    add("OUTLN");
-                    add("XDB");
-                    add("CTXSYS");
-                    add("XS$NULL");
-                    add("MDSYS");
-                    add("FLOWS_FILES");
-                }
-            };
+    private static final Set<String> builtinDatabases = new HashSet<String>();
 
     private final JdbcDialectTypeMapper dialectTypeMapper;
 
@@ -75,7 +58,7 @@ public class OracleCatalog extends AbstractJdbcCatalog {
     public List<String> listDatabases() throws CatalogException {
         return extractColumnValuesBySQL(
                 defaultUrl,
-                "select username from sys.dba_users",
+                "select username from sys.dba_users where DEFAULT_TABLESPACE <> 'SYSTEM' and DEFAULT_TABLESPACE <> 'SYSAUX' ",
                 1,
                 dbName -> !builtinDatabases.contains(dbName));
     }
