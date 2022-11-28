@@ -12,7 +12,7 @@ CREATE CATALOG mysql_cdc_catalog WITH(
     'password' = 'mysql2022#'
 );
 
-SELECT * FROM user_city /*+ OPTIONS('scan.startup.mode'='latest-offset') */
+SELECT * FROM mysql_cdc_catalog.example.user_city /*+ OPTIONS('scan.startup.mode'='latest-offset') */
 ```
 
 
