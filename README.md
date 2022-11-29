@@ -1,5 +1,7 @@
 ### Flink CDC Catalog
 
+目前已经支持 MySQL、Postgres、Oracle Catalog
+
 
 ### Example
 ```SQL
