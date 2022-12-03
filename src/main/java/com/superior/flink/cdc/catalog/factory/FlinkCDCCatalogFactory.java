@@ -1,8 +1,6 @@
 package com.superior.flink.cdc.catalog.factory;
 
-import com.superior.flink.cdc.catalog.MySqlCatalog;
-import com.superior.flink.cdc.catalog.OracleCatalog;
-import com.superior.flink.cdc.catalog.PostgresCatalog;
+import com.superior.flink.cdc.catalog.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.table.catalog.Catalog;
@@ -50,6 +48,23 @@ public class FlinkCDCCatalogFactory implements CatalogFactory {
                     baseUrl);
         } else if (StringUtils.startsWith(baseUrl, "jdbc:oracle:")) {
             return new OracleCatalog(
+                    context.getClassLoader(),
+                    context.getName(),
+                    helper.getOptions().get(DEFAULT_DATABASE),
+                    helper.getOptions().get(USERNAME),
+                    helper.getOptions().get(PASSWORD),
+                    baseUrl);
+        } else if (StringUtils.startsWith(baseUrl, "jdbc:sqlserver:")) {
+            return new SqlServerCatalog(
+                    context.getClassLoader(),
+                    context.getName(),
+                    helper.getOptions().get(DEFAULT_DATABASE),
+                    helper.getOptions().get(SCHEMA_NAME),
+                    helper.getOptions().get(USERNAME),
+                    helper.getOptions().get(PASSWORD),
+                    baseUrl);
+        } else if (StringUtils.startsWith(baseUrl, "jdbc:sqlserver:")) {
+            return new Db2Catalog(
                     context.getClassLoader(),
                     context.getName(),
                     helper.getOptions().get(DEFAULT_DATABASE),

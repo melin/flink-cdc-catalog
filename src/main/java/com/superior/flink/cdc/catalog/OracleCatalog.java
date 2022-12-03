@@ -35,7 +35,7 @@ import static org.apache.flink.table.factories.FactoryUtil.CONNECTOR;
 
 public class OracleCatalog extends AbstractJdbcCatalog {
 
-    private static final Logger LOG = LoggerFactory.getLogger(org.apache.flink.connector.jdbc.catalog.MySqlCatalog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OracleCatalog.class);
 
     private static final String ORACLE_CONNECTOR = "oracle-cdc";
 
@@ -62,6 +62,11 @@ public class OracleCatalog extends AbstractJdbcCatalog {
     }
 
     @Override
+    protected String getJdbcUrl() {
+        return baseUrl + defaultDatabase;
+    }
+
+    @Override
     public Optional<Factory> getFactory() {
         return Optional.of(new OracleTableSourceFactory());
     }
@@ -74,7 +79,7 @@ public class OracleCatalog extends AbstractJdbcCatalog {
     @Override
     public List<String> listDatabases() throws CatalogException {
         return extractColumnValuesBySQL(
-                defaultUrl,
+                this.getJdbcUrl(),
                 "select username from sys.dba_users where DEFAULT_TABLESPACE <> 'SYSTEM' and DEFAULT_TABLESPACE <> 'SYSAUX' ",
                 1,
                 dbName -> !builtinDatabases.contains(dbName));
@@ -148,8 +153,8 @@ public class OracleCatalog extends AbstractJdbcCatalog {
             props.put(JdbcConnectorOptions.USERNAME.key(), username);
             props.put(JdbcConnectorOptions.PASSWORD.key(), pwd);
             props.put(DATABASE_NAME.key(), getDefaultDatabase());
-            props.put(TABLE_NAME.key(), getSchemaTableName(tablePath));
             props.put(SCHEMA_NAME.key(), getSchemaName(tablePath));
+            props.put(TABLE_NAME.key(), getSchemaTableName(tablePath));
             return CatalogTable.of(tableSchema, null, Lists.newArrayList(), props);
         } catch (Exception e) {
             throw new CatalogException(

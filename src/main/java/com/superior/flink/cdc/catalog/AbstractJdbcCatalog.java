@@ -17,10 +17,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.ververica.cdc.connectors.base.options.JdbcSourceOptions.DATABASE_NAME;
+import static com.ververica.cdc.connectors.base.options.JdbcSourceOptions.SCHEMA_NAME;
 import static org.apache.flink.connector.jdbc.table.JdbcConnectorOptions.*;
 import static org.apache.flink.table.factories.FactoryUtil.CONNECTOR;
 
 abstract public class AbstractJdbcCatalog extends org.apache.flink.connector.jdbc.catalog.AbstractJdbcCatalog {
+
+    protected final String defaultDatabase;
 
     public AbstractJdbcCatalog(
             ClassLoader userClassLoader,
@@ -30,7 +34,10 @@ abstract public class AbstractJdbcCatalog extends org.apache.flink.connector.jdb
             String pwd,
             String baseUrl) {
         super(userClassLoader, catalogName, defaultDatabase, username, pwd, baseUrl);
+        this.defaultDatabase = defaultDatabase;
     }
+
+    abstract protected String getJdbcUrl();
 
     @Override
     public CatalogBaseTable getTable(ObjectPath tablePath)
@@ -40,15 +47,12 @@ abstract public class AbstractJdbcCatalog extends org.apache.flink.connector.jdb
             throw new TableNotExistException(getName(), tablePath);
         }
 
-        String databaseName = tablePath.getDatabaseName();
-        String dbUrl = baseUrl + databaseName;
-
-        try (Connection conn = DriverManager.getConnection(dbUrl, username, pwd)) {
+        try (Connection conn = DriverManager.getConnection(getJdbcUrl(), username, pwd)) {
             DatabaseMetaData metaData = conn.getMetaData();
             Optional<UniqueConstraint> primaryKey =
                     getPrimaryKey(
                             metaData,
-                            databaseName,
+                            defaultDatabase,
                             getSchemaName(tablePath),
                             getTableName(tablePath));
 
@@ -83,7 +87,10 @@ abstract public class AbstractJdbcCatalog extends org.apache.flink.connector.jdb
             URI uri = URI.create(cleanURI);
             props.put(MySqlSourceOptions.HOSTNAME.key(), uri.getHost());
             props.put(MySqlSourceOptions.PORT.key(), String.valueOf(uri.getPort()));
-            props.put(MySqlSourceOptions.DATABASE_NAME.key(), getSchemaName(tablePath));
+            props.put(DATABASE_NAME.key(), getDefaultDatabase());
+            if (!getDefaultDatabase().equals(getSchemaName(tablePath))) {
+                props.put(SCHEMA_NAME.key(), getSchemaName(tablePath));
+            }
             props.put(TABLE_NAME.key(), getSchemaTableName(tablePath));
 
             return CatalogTable.of(tableSchema, null, Lists.newArrayList(), props);

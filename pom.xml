@@ -120,6 +120,18 @@ under the License.
 			<version>${flink.cdc.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.ververica</groupId>
+			<artifactId>flink-connector-sqlserver-cdc</artifactId>
+			<version>${flink.cdc.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ververica</groupId>
+			<artifactId>flink-connector-db2-cdc</artifactId>
+			<version>${flink.cdc.version}</version>
+		</dependency>
+
 		<!-- Add logging framework, to produce console output when running in the IDE. -->
 		<!-- These dependencies are excluded from the application JAR by default. -->
 		<dependency>

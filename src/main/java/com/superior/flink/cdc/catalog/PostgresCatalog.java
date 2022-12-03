@@ -65,6 +65,11 @@ public class PostgresCatalog extends AbstractJdbcCatalog {
     }
 
     @Override
+    protected String getJdbcUrl() {
+        return baseUrl + defaultDatabase;
+    }
+
+    @Override
     public Optional<Factory> getFactory() {
         return Optional.of(new PostgreSQLTableFactory());
     }
@@ -80,7 +85,7 @@ public class PostgresCatalog extends AbstractJdbcCatalog {
     public List<String> listDatabases() throws CatalogException {
 
         return extractColumnValuesBySQL(
-                defaultUrl,
+                this.getJdbcUrl(),
                 "SELECT datname FROM pg_database;",
                 1,
                 dbName -> !builtinDatabases.contains(dbName));

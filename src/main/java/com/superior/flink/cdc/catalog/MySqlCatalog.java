@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 public class MySqlCatalog extends AbstractJdbcCatalog {
 
-    private static final Logger LOG = LoggerFactory.getLogger(org.apache.flink.connector.jdbc.catalog.MySqlCatalog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MySqlCatalog.class);
 
     private static final String MYSQL_CONNECTOR = "mysql-cdc";
 
@@ -56,6 +56,11 @@ public class MySqlCatalog extends AbstractJdbcCatalog {
     }
 
     @Override
+    protected String getJdbcUrl() {
+        return baseUrl + defaultDatabase;
+    }
+
+    @Override
     public Optional<Factory> getFactory() {
         return Optional.of(new MySqlTableSourceFactory());
     }
@@ -68,7 +73,7 @@ public class MySqlCatalog extends AbstractJdbcCatalog {
     @Override
     public List<String> listDatabases() throws CatalogException {
         return extractColumnValuesBySQL(
-                defaultUrl,
+                this.getJdbcUrl(),
                 "SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`;",
                 1,
                 dbName -> !builtinDatabases.contains(dbName));
@@ -107,11 +112,11 @@ public class MySqlCatalog extends AbstractJdbcCatalog {
     private String getDatabaseVersion() {
         try (TemporaryClassLoaderContext ignored =
                      TemporaryClassLoaderContext.of(userClassLoader)) {
-            try (Connection conn = DriverManager.getConnection(defaultUrl, username, pwd)) {
+            try (Connection conn = DriverManager.getConnection(this.getJdbcUrl(), username, pwd)) {
                 return conn.getMetaData().getDatabaseProductVersion();
             } catch (Exception e) {
                 throw new CatalogException(
-                        String.format("Failed in getting MySQL version by %s.", defaultUrl), e);
+                        String.format("Failed in getting MySQL version by %s.", this.getJdbcUrl()), e);
             }
         }
     }
@@ -119,14 +124,14 @@ public class MySqlCatalog extends AbstractJdbcCatalog {
     private String getDriverVersion() {
         try (TemporaryClassLoaderContext ignored =
                      TemporaryClassLoaderContext.of(userClassLoader)) {
-            try (Connection conn = DriverManager.getConnection(defaultUrl, username, pwd)) {
+            try (Connection conn = DriverManager.getConnection(this.getJdbcUrl(), username, pwd)) {
                 String driverVersion = conn.getMetaData().getDriverVersion();
                 Pattern regexp = Pattern.compile("\\d+?\\.\\d+?\\.\\d+");
                 Matcher matcher = regexp.matcher(driverVersion);
                 return matcher.find() ? matcher.group(0) : null;
             } catch (Exception e) {
                 throw new CatalogException(
-                        String.format("Failed in getting MySQL driver version by %s.", defaultUrl),
+                        String.format("Failed in getting MySQL driver version by %s.", this.getJdbcUrl()),
                         e);
             }
         }
