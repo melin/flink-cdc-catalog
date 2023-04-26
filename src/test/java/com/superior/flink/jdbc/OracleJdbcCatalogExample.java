@@ -13,7 +13,7 @@ public class OracleJdbcCatalogExample {
 
         String sql = "CREATE CATALOG oracle_catalog WITH(\n" +
                 "    'type' = 'jdbc_oracle',\n" +
-                "    'base-url' = 'jdbc:oracle:thin:@//172.18.1.51:1523',\n" +
+                "    'base-url' = 'jdbc:oracle:thin:@//172.18.1.56:1521',\n" +
                 "    'default-database' = 'XE',\n" +
                 "    'username' = 'flinkuser',\n" +
                 "    'password' = 'flinkpw'\n" +
@@ -21,6 +21,6 @@ public class OracleJdbcCatalogExample {
         tableEnvironment.executeSql(sql);
         tableEnvironment.useCatalog("oracle_catalog");
 
-        tableEnvironment.executeSql("SELECT * FROM oracle_catalog.FLINKUSER.STUDENT").print();
+        tableEnvironment.executeSql("SELECT * FROM oracle_catalog.FLINKUSER.ORDERS").print();
     }
 }

@@ -1,5 +1,6 @@
-package com.superior.flink.cdc.catalog.factory;
+package com.superior.flink.catalog.cdc.factory;
 
+import com.superior.flink.catalog.cdc.*;
 import com.superior.flink.cdc.catalog.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.ConfigOption;

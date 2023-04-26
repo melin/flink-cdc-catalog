@@ -1,6 +1,6 @@
-package com.superior.flink.jdbc.catalog;
+package com.superior.flink.catalog.jdbc;
 
-import com.superior.flink.mapper.OracleTypeMapper;
+import com.superior.flink.catalog.jdbc.mapper.OracleTypeMapper;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.connector.jdbc.catalog.AbstractJdbcCatalog;
@@ -33,7 +33,19 @@ public class OracleCatalog extends AbstractJdbcCatalog {
 
     private static final Logger LOG = LoggerFactory.getLogger(OracleCatalog.class);
 
-    private static final Set<String> builtinDatabases = new HashSet<String>();
+    private static final Set<String> builtinDatabases = new HashSet<String>() {
+        {
+            add("SCOTT");
+            add("ANONYMOUS");
+            add("XS$NULL");
+            add("DIP");
+            add("SPATIAL_WFS_ADMIN_USR");
+            add("SPATIAL_CSW_ADMIN_USR");
+            add("APEX_PUBLIC_USER");
+            add("ORACLE_OCM");
+            add("MDDATA");
+        }
+    };
 
     private final JdbcDialectTypeMapper dialectTypeMapper;
 

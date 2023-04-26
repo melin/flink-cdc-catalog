@@ -1,4 +1,4 @@
-package com.superior.flink.cdc.catalog;
+package com.superior.flink.catalog.cdc;
 
 import com.ververica.cdc.connectors.postgres.table.PostgreSQLTableFactory;
 import org.apache.commons.compress.utils.Lists;

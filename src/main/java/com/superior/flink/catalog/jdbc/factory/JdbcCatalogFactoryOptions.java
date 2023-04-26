@@ -1,4 +1,4 @@
-package com.superior.flink.jdbc.catalog.factory;
+package com.superior.flink.catalog.jdbc.factory;
 
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigOptions;

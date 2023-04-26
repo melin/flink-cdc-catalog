@@ -1,4 +1,4 @@
-package com.superior.flink.mapper;
+package com.superior.flink.catalog.jdbc.mapper;
 
 import oracle.jdbc.OracleTypes;
 import org.apache.flink.connector.jdbc.dialect.JdbcDialectTypeMapper;

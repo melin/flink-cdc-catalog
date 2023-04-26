@@ -1,6 +1,6 @@
-package com.superior.flink.cdc.catalog;
+package com.superior.flink.catalog.cdc;
 
-import com.ververica.cdc.connectors.db2.table.Db2TableSourceFactory;
+import com.ververica.cdc.connectors.mysql.table.MySqlTableSourceFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.connector.jdbc.dialect.JdbcDialectTypeMapper;
 import org.apache.flink.connector.jdbc.dialect.mysql.MySqlTypeMapper;
@@ -25,11 +25,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Db2Catalog extends AbstractJdbcCatalog {
+public class TidbCatalog extends AbstractJdbcCatalog {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Db2Catalog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TidbCatalog.class);
 
-    private static final String MYSQL_CONNECTOR = "db2-cdc";
+    private static final String MYSQL_CONNECTOR = "tidb-cdc";
 
     private final JdbcDialectTypeMapper dialectTypeMapper;
 
@@ -43,7 +43,7 @@ public class Db2Catalog extends AbstractJdbcCatalog {
                 }
             };
 
-    public Db2Catalog(
+    public TidbCatalog(
             ClassLoader userClassLoader,
             String catalogName,
             String defaultDatabase,
@@ -68,7 +68,7 @@ public class Db2Catalog extends AbstractJdbcCatalog {
 
     @Override
     public Optional<Factory> getFactory() {
-        return Optional.of(new Db2TableSourceFactory());
+        return Optional.of(new MySqlTableSourceFactory());
     }
 
     @Override
@@ -95,7 +95,7 @@ public class Db2Catalog extends AbstractJdbcCatalog {
         }
 
         return extractColumnValuesBySQL(
-                this.getJdbcUrl(),
+                baseUrl + databaseName,
                 "SELECT TABLE_NAME FROM information_schema.`TABLES` WHERE TABLE_SCHEMA = ?",
                 1,
                 null,

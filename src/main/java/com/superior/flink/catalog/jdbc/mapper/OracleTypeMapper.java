@@ -1,4 +1,4 @@
-package com.superior.flink.mapper;
+package com.superior.flink.catalog.jdbc.mapper;
 
 import oracle.jdbc.OracleTypes;
 import org.apache.flink.connector.jdbc.dialect.JdbcDialectTypeMapper;
@@ -18,18 +18,17 @@ public class OracleTypeMapper implements JdbcDialectTypeMapper {
     private final String driverVersion;
 
     public OracleTypeMapper(String databaseVersion, String driverVersion) {
-        this.databaseVersion = databaseVersion;
+        this.databaseVersion =databaseVersion;
         this.driverVersion = driverVersion;
     }
 
     @Override
-    public DataType mapping(ObjectPath tablePath, ResultSetMetaData metadata, int colIndex)
-            throws SQLException {
-        int jdbcType = metadata.getColumnType(colIndex);
-        String columnName = metadata.getColumnName(colIndex);
-        String mysqlType = metadata.getColumnTypeName(colIndex).toUpperCase();
-        int precision = metadata.getPrecision(colIndex);
-        int scale = metadata.getScale(colIndex);
+    public DataType mapping(ObjectPath tablePath, ResultSetMetaData metaData, int colIndex) throws SQLException {
+        int jdbcType = metaData.getColumnType(colIndex);
+        String columnName = metaData.getColumnName(colIndex);
+        String oracleType = metaData.getColumnTypeName(colIndex).toUpperCase();
+        int precision = metaData.getPrecision(colIndex);
+        int scale = metaData.getScale(colIndex);
 
         switch (jdbcType) {
             case Types.CHAR:
@@ -55,7 +54,7 @@ public class OracleTypeMapper implements JdbcDialectTypeMapper {
             case Types.NUMERIC:
             case Types.DECIMAL:
                 if (precision > 0 && precision < DecimalType.MAX_PRECISION) {
-                    return DataTypes.DECIMAL(precision, metadata.getScale(colIndex));
+                    return DataTypes.DECIMAL(precision, metaData.getScale(colIndex));
                 }
                 return DataTypes.DECIMAL(DecimalType.MAX_PRECISION, 18);
             case Types.DATE:
@@ -64,11 +63,7 @@ public class OracleTypeMapper implements JdbcDialectTypeMapper {
             case Types.TIMESTAMP_WITH_TIMEZONE:
             case OracleTypes.TIMESTAMPTZ:
             case OracleTypes.TIMESTAMPLTZ:
-                if (scale > 0) {
-                    return DataTypes.TIMESTAMP(scale);
-                } else {
-                    return DataTypes.TIMESTAMP();
-                }
+                return scale > 0 ? DataTypes.TIMESTAMP(scale) : DataTypes.TIMESTAMP();
             case OracleTypes.INTERVALYM:
                 return DataTypes.INTERVAL(DataTypes.YEAR(), DataTypes.MONTH());
             case OracleTypes.INTERVALDS:
@@ -76,11 +71,11 @@ public class OracleTypeMapper implements JdbcDialectTypeMapper {
             case Types.BOOLEAN:
                 return DataTypes.BOOLEAN();
             default:
-                final String jdbcColumnName = metadata.getColumnName(colIndex);
+                final String jdbcColumnName = metaData.getColumnName(colIndex);
                 throw new UnsupportedOperationException(
                         String.format(
-                                "Doesn't support SqlServer type '%s' on column '%s' in SqlServer version %s, driver version %s yet.",
-                                mysqlType, jdbcColumnName, databaseVersion, driverVersion));
+                                "Doesn't support Oracle type '%s' on column '%s' in Oracle version %s, driver version %s yet.",
+                                oracleType, jdbcColumnName, databaseVersion, driverVersion));
         }
     }
 }

@@ -1,6 +1,6 @@
-package com.superior.flink.jdbc.catalog.factory;
+package com.superior.flink.catalog.jdbc.factory;
 
-import com.superior.flink.jdbc.catalog.OracleCatalog;
+import com.superior.flink.catalog.jdbc.OracleCatalog;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.connector.jdbc.catalog.JdbcCatalog;
 import org.apache.flink.connector.jdbc.catalog.factory.JdbcCatalogFactoryOptions;

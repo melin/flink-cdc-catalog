@@ -1,6 +1,6 @@
-package com.superior.flink.cdc.catalog;
+package com.superior.flink.catalog.cdc;
 
-import com.superior.flink.mapper.OracleTypeMapper;
+import com.superior.flink.catalog.jdbc.mapper.OracleTypeMapper;
 import com.ververica.cdc.connectors.oracle.source.config.OracleSourceOptions;
 import com.ververica.cdc.connectors.oracle.table.OracleTableSourceFactory;
 import org.apache.commons.compress.utils.Lists;

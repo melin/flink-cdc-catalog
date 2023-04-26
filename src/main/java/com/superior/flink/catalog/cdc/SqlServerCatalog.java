@@ -1,6 +1,6 @@
-package com.superior.flink.cdc.catalog;
+package com.superior.flink.catalog.cdc;
 
-import com.superior.flink.mapper.SqlServerTypeMapper;
+import com.superior.flink.catalog.jdbc.mapper.SqlServerTypeMapper;
 import com.ververica.cdc.connectors.sqlserver.table.SqlServerTableFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.connector.jdbc.dialect.JdbcDialectTypeMapper;
