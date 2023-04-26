@@ -1,4 +1,4 @@
-package com.superior.flink.cdc.catalog.oracle;
+package com.superior.flink.catalog.cdc.oracle;
 
 import org.testcontainers.containers.OracleContainer;
 

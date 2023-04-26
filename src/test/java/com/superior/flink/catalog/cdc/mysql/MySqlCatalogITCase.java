@@ -1,4 +1,4 @@
-package com.superior.flink.cdc.catalog.mysql;
+package com.superior.flink.catalog.cdc.mysql;
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;

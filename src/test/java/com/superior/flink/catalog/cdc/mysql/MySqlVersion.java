@@ -1,4 +1,4 @@
-package com.superior.flink.cdc.catalog.mysql;
+package com.superior.flink.catalog.cdc.mysql;
 
 /** MySql version enum. */
 public enum MySqlVersion {

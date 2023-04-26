@@ -1,4 +1,4 @@
-package com.superior.flink.cdc.catalog.oracle;
+package com.superior.flink.catalog.cdc.oracle;
 
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -31,8 +31,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.superior.flink.cdc.catalog.oracle.OracleTestUtils.CONNECTOR_PWD;
-import static com.superior.flink.cdc.catalog.oracle.OracleTestUtils.CONNECTOR_USER;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
 
@@ -696,8 +694,8 @@ public class OracleConnectorITCase extends AbstractTestBase {
                                 + ")",
                         oracleContainer.getHost(),
                         oracleContainer.getOraclePort(),
-                        CONNECTOR_USER,
-                        CONNECTOR_PWD,
+                        OracleTestUtils.CONNECTOR_USER,
+                        OracleTestUtils.CONNECTOR_PWD,
                         parallelismSnapshot,
                         "debezium",
                         "full_types");

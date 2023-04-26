@@ -1,4 +1,4 @@
-package com.superior.flink.jdbc;
+package com.superior.flink.catalog.jdbc;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

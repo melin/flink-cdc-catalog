@@ -1,4 +1,4 @@
-package com.superior.flink.cdc.catalog.sqlserver;
+package com.superior.flink.catalog.cdc.sqlserver;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

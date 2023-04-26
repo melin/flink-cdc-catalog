@@ -1,3 +1,4 @@
 com.superior.flink.catalog.cdc.factory.FlinkCDCCatalogFactory
 com.superior.flink.catalog.jdbc.factory.OracleJdbcCatalogFactory
 com.superior.flink.catalog.jdbc.factory.SqlServerJdbcCatalogFactory
+com.superior.flink.catalog.kafka.factory.KafkaCatalogFactory
