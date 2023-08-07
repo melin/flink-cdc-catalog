@@ -86,7 +86,6 @@ public class KafkaCatalog extends BaseKafkaCatalog {
             props.put(CONNECTOR.key(), IDENTIFIER);
             props.put(PROPS_BOOTSTRAP_SERVERS.key(), bootstrapServers);
 
-            props.put(TOPIC.key(), tablePath.getObjectName());
 
             return CatalogTable.of(tableSchema, null, org.apache.commons.compress.utils.Lists.newArrayList(), props);
         } catch (Exception e) {
